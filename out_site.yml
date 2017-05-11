@@ -1,0 +1,29 @@
+# Usage : docker stack deploy -c acenter.yml acenter
+version: "3"
+
+networks:
+    gb-net:
+        external: true
+
+services:
+    out_site:
+        image: hub:5000/tengine-site
+        networks:
+            - gb-net
+        hostname: acenter_ngx
+        ports:
+            - "80:80"
+        volumes:
+            - /var/gb/conf:/var/gb/conf
+            - /var/gb/logs/tengine/site:/data/nginx/logs
+            - /var/gb/op-out-site-env/conf/tengine-site/http_backhost:/usr/local/nginx/conf/http_backhost
+            - /var/gb/op-out-site-env/conf/tengine-site/http_facadehost:/usr/local/nginx/conf/http_facadehost
+            - /var/gb/op-out-site-env/build/tengine-site/script:/usr/local/nginx/script
+            - /var/gb/op-out-site-env/build/tengine-site/html:/usr/local/nginx/html
+        deploy:
+            replicas: 1
+            placement:
+                constraints:
+                    - node.hostname == D1
+            restart_policy:
+                    condition: on-failure

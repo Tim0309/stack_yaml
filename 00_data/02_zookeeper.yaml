@@ -1,0 +1,66 @@
+# Usage : docker stack deploy -c zookeeper.stack.yml ZOO
+
+version: "3"
+
+networks:
+    gb-net:
+        external: true
+
+services:
+    ZOO_d1:
+        image: hub:5000/gb-zookeeper:3.4.10
+        networks:
+            - gb-net
+        hostname: ZOO_d1
+        environment:
+            - ZOO_MY_ID=1
+            - ZOO_SERVERS=server.1=ZOO_d1:2888:3888 server.2=ZOO_d2:2888:3888 server.3=ZOO_d3:2888:3888
+        volumes:
+            - /var/gb/data/zookeeper/data.d1:/data
+            - /var/gb/logs/zookeeper/log.d1:/datalog
+            - /var/gb/conf/zookeeper:/conf
+        deploy:
+            placement:
+                constraints:
+                    - node.hostname == D1
+            restart_policy:
+                condition: on-failure
+
+    ZOO_d2:
+        image: hub:5000/gb-zookeeper:3.4.10
+        networks:
+            - gb-net
+        hostname: ZOO_d2
+        environment:
+            - ZOO_MY_ID=2
+            - ZOO_SERVERS=server.1=ZOO_d1:2888:3888 server.2=ZOO_d2:2888:3888 server.3=ZOO_d3:2888:3888
+        volumes:
+            - /var/gb/data/zookeeper/data.d2:/data
+            - /var/gb/logs/zookeeper/log.d2:/datalog
+            - /var/gb/conf/zookeeper:/conf
+        deploy:
+            placement:
+                constraints:
+                    - node.hostname == D2
+            restart_policy:
+                condition: on-failure
+
+    ZOO_d3:
+        image: hub:5000/gb-zookeeper:3.4.10
+        networks:
+            - gb-net
+        hostname: ZOO_d3
+        environment:
+            - ZOO_MY_ID=3
+            - ZOO_SERVERS=server.1=ZOO_d1:2888:3888 server.2=ZOO_d2:2888:3888 server.3=ZOO_d3:2888:3888
+        volumes:
+            - /var/gb/data/zookeeper/data.d3:/data
+            - /var/gb/logs/zookeeper/log.d3:/datalog
+            - /var/gb/conf/zookeeper:/conf
+        deploy:
+            placement:
+                constraints:
+                    - node.hostname == D3
+            restart_policy:
+                condition: on-failure
+

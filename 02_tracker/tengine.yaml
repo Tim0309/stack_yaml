@@ -1,0 +1,308 @@
+# tngx-msites     "81:80"
+# tngx-pcenter    "82:80"
+# tngx-tcenter    "83:80"
+# tngx-acenter    "84:80"
+# tngx-mdcenter   "85:80"
+# tngx-boss       "86:80"
+# tngx-ccenter    "87:80"
+# tngx-rcenter    "89:80"
+# tngx-api        "90:80"
+# tngx-fserver    "91:80"
+# tngx-gather     "92:92" "61:61"  "62:62" "63:63"
+# tengine-mobile  "93:80"
+# 
+version: "3"
+networks:
+  gb-net:
+    external: true
+
+services:
+  tngx-msites:
+    image: hub:5000/gb-tengine:2.2.0
+    networks:
+      - gb-net
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.type == gb_Trace
+      restart_policy:
+        condition: on-failure
+    hostname: tngx-msites
+    ports:
+      - "81:80"
+    volumes:
+      - /var/gb/data/fserver/upload/data:/data/upload/data
+      - /var/gb/conf/nginx-inner-outer/http_backhost_outer:/usr/local/nginx/conf/http_backhost_outer
+      - /var/gb/conf/nginx-inner-msites/lua:/usr/local/nginx/conf/lua
+      - /var/gb/conf/nginx-inner-msites/http_backhost:/usr/local/nginx/conf/http_backhost
+      - /var/gb/conf/nginx-inner-msites/http_facadehost:/usr/local/nginx/conf/http_facadehost
+      - /var/gb/conf/nginx-inner-msites/tcp_backhost:/usr/local/nginx/conf/tcp_backhost
+      - /var/gb/conf/nginx-inner-msites/tcp_facadehost:/usr/local/nginx/conf/tcp_facadehost
+      - /var/gb/logs/tengine/msites:/data/nginx/logs
+
+  tngx-pcenter:
+    image: hub:5000/gb-tengine:2.2.0
+    networks:
+      - gb-net
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.type == gb_Trace
+      restart_policy:
+        condition: on-failure
+    hostname: tngx-pcenter
+    ports:
+      - "82:80"
+    volumes:
+      - /var/gb/data/fserver/upload/data:/data/upload/data
+      - /var/gb/conf/nginx-inner-outer/http_backhost_outer:/usr/local/nginx/conf/http_backhost_outer
+      - /var/gb/conf/nginx-inner-pcenter/http_backhost:/usr/local/nginx/conf/http_backhost
+      - /var/gb/conf/nginx-inner-pcenter/http_facadehost:/usr/local/nginx/conf/http_facadehost
+      - /var/gb/conf/nginx-inner-pcenter/tcp_backhost:/usr/local/nginx/conf/tcp_backhost
+      - /var/gb/conf/nginx-inner-pcenter/tcp_facadehost:/usr/local/nginx/conf/tcp_facadehost
+      - /var/gb/logs/tengine/pcenter:/data/nginx/logs
+
+  tngx-tcenter:
+    image: hub:5000/gb-tengine:2.2.0
+    networks:
+      - gb-net
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.type == gb_Trace
+      restart_policy:
+        condition: on-failure
+    hostname: tngx-tcenter
+    ports:
+      - "83:80"
+    volumes:
+      - /var/gb/data/fserver/upload/data:/data/upload/data
+      - /var/gb/conf/nginx-inner-outer/http_backhost_outer:/usr/local/nginx/conf/http_backhost_outer
+      - /var/gb/conf/nginx-inner-tcenter/http_backhost:/usr/local/nginx/conf/http_backhost
+      - /var/gb/conf/nginx-inner-tcenter/http_facadehost:/usr/local/nginx/conf/http_facadehost
+      - /var/gb/conf/nginx-inner-tcenter/tcp_backhost:/usr/local/nginx/conf/tcp_backhost
+      - /var/gb/conf/nginx-inner-tcenter/tcp_facadehost:/usr/local/nginx/conf/tcp_facadehost
+      - /var/gb/logs/tengine/tcenter:/data/nginx/logs
+
+  tngx-acenter:
+    image: hub:5000/gb-tengine:2.2.0
+    networks:
+      - gb-net
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.type == gb_Trace
+      restart_policy:
+        condition: on-failure
+    hostname: tngx-acenter
+    ports:
+      - "84:80"
+    volumes:
+      - /var/gb/data/fserver/upload/data:/data/upload/data
+      - /var/gb/conf/nginx-inner-outer/http_backhost_outer:/usr/local/nginx/conf/http_backhost_outer
+      - /var/gb/conf/nginx-inner-acenter/http_backhost:/usr/local/nginx/conf/http_backhost
+      - /var/gb/conf/nginx-inner-acenter/http_facadehost:/usr/local/nginx/conf/http_facadehost
+      - /var/gb/conf/nginx-inner-acenter/tcp_backhost:/usr/local/nginx/conf/tcp_backhost
+      - /var/gb/conf/nginx-inner-acenter/tcp_facadehost:/usr/local/nginx/conf/tcp_facadehost
+      - /var/gb/logs/tengine/acenter:/data/nginx/logs
+
+  tngx-mdcenter:
+    image: hub:5000/gb-tengine:2.2.0
+    networks:
+      - gb-net
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.type == gb_Trace
+      restart_policy:
+        condition: on-failure
+    hostname: tngx-mdcenter
+    ports:
+      - "85:80"
+    volumes:
+      - /var/gb/data/fserver/upload/data:/data/upload/data
+      - /var/gb/conf/nginx-inner-outer/http_backhost_outer:/usr/local/nginx/conf/http_backhost_outer
+      - /var/gb/conf/nginx-inner-mdcenter/http_backhost:/usr/local/nginx/conf/http_backhost
+      - /var/gb/conf/nginx-inner-mdcenter/http_facadehost:/usr/local/nginx/conf/http_facadehost
+      - /var/gb/conf/nginx-inner-mdcenter/tcp_backhost:/usr/local/nginx/conf/tcp_backhost
+      - /var/gb/conf/nginx-inner-mdcenter/tcp_facadehost:/usr/local/nginx/conf/tcp_facadehost
+      - /var/gb/logs/tengine/mdcenter:/data/nginx/logs
+
+  tngx-boss:
+    image: hub:5000/gb-tengine:2.2.0
+    networks:
+      - gb-net
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.type == gb_Trace
+      restart_policy:
+        condition: on-failure
+    hostname: tngx-boss
+    ports:
+      - "86:80"
+    volumes:
+      - /var/gb/data/fserver/upload/data:/data/upload/data
+      - /var/gb/conf/nginx-inner-outer/http_backhost_outer:/usr/local/nginx/conf/http_backhost_outer
+      - /var/gb/conf/nginx-inner-boss/http_backhost:/usr/local/nginx/conf/http_backhost
+      - /var/gb/conf/nginx-inner-boss/http_facadehost:/usr/local/nginx/conf/http_facadehost
+      - /var/gb/conf/nginx-inner-boss/tcp_backhost:/usr/local/nginx/conf/tcp_backhost
+      - /var/gb/conf/nginx-inner-boss/tcp_facadehost:/usr/local/nginx/conf/tcp_facadehost
+      - /var/gb/logs/tengine/boss:/data/nginx/logs
+
+  tngx-ccenter:
+    image: hub:5000/gb-tengine:2.2.0
+    networks:
+      - gb-net
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.type == gb_Trace
+      restart_policy:
+        condition: on-failure
+    hostname: tngx-ccenter
+    ports:
+      - "87:80"
+    volumes:
+      - /var/gb/data/fserver/upload/data:/data/upload/data
+      - /var/gb/conf/nginx-inner-outer/http_backhost_outer:/usr/local/nginx/conf/http_backhost_outer
+      - /var/gb/conf/nginx-inner-ccenter/http_backhost:/usr/local/nginx/conf/http_backhost
+      - /var/gb/conf/nginx-inner-ccenter/http_facadehost:/usr/local/nginx/conf/http_facadehost
+      - /var/gb/conf/nginx-inner-ccenter/tcp_backhost:/usr/local/nginx/conf/tcp_backhost
+      - /var/gb/conf/nginx-inner-ccenter/tcp_facadehost:/usr/local/nginx/conf/tcp_facadehost
+      - /var/gb/logs/tengine/ccenter:/data/nginx/logs
+
+# 88 
+
+  tngx-rcenter:
+    image: hub:5000/gb-tengine:2.2.0
+    networks:
+      - gb-net
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.type == gb_Trace
+      restart_policy:
+        condition: on-failure
+    hostname: tngx-rcenter
+    ports:
+      - "89:80"
+    volumes:
+      - /var/gb/conf/nginx-inner-outer/http_backhost_outer:/usr/local/nginx/conf/http_backhost_outer
+      - /var/gb/conf/nginx-rcenter/http_backhost:/usr/local/nginx/conf/http_backhost
+      - /var/gb/conf/nginx-rcenter/http_facadehost:/usr/local/nginx/conf/http_facadehost
+      - /var/gb/conf/nginx-rcenter/tcp_backhost:/usr/local/nginx/conf/tcp_backhost
+      - /var/gb/conf/nginx-rcenter/tcp_facadehost:/usr/local/nginx/conf/tcp_facadehost
+      - /var/gb/logs/tengine/rcenter:/data/nginx/logs
+      - /var/gb/data/fserver/upload/data:/usr/local/nginx/html/fserver/files 
+      - /var/gb/apps/ftl:/usr/local/nginx/html/ftl
+      - /var/gb/apps/rcenter:/usr/local/nginx/html/rcenter
+      - /var/gb/script:/usr/local/nginx/script
+
+  tngx-api:
+    image: hub:5000/gb-tengine:2.2.0
+    networks:
+      - gb-net
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.type == gb_Trace
+      restart_policy:
+        condition: on-failure
+    hostname: tngx-api
+    ports:
+      - "90:80"
+    volumes:
+      - /var/gb/data/fserver/upload/data:/data/upload/data
+      - /var/gb/conf/nginx-inner-outer/http_backhost_outer:/usr/local/nginx/conf/http_backhost_outer
+      - /var/gb/conf/nginx-inner-api/http_backhost:/usr/local/nginx/conf/http_backhost
+      - /var/gb/conf/nginx-inner-api/http_facadehost:/usr/local/nginx/conf/http_facadehost
+      - /var/gb/conf/nginx-inner-api/tcp_backhost:/usr/local/nginx/conf/tcp_backhost
+      - /var/gb/conf/nginx-inner-api/tcp_facadehost:/usr/local/nginx/conf/tcp_facadehost
+      - /var/gb/logs/tengine/api:/data/nginx/logs
+
+  tngx-fserver:
+    image: hub:5000/gb-tengine:2.2.0
+    networks:
+      - gb-net
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.type == gb_Trace
+      restart_policy:
+        condition: on-failure
+    hostname: tngx-fserver
+    ports:
+      - "91:80"
+    volumes:
+      - /var/gb/data/fserver/upload/data:/data/upload/data
+      - /var/gb/conf/nginx-inner-outer/http_backhost_outer:/usr/local/nginx/conf/http_backhost_outer
+      - /var/gb/conf/nginx-inner-fserver/http_backhost:/usr/local/nginx/conf/http_backhost
+      - /var/gb/conf/nginx-inner-fserver/http_facadehost:/usr/local/nginx/conf/http_facadehost
+      - /var/gb/conf/nginx-inner-fserver/tcp_backhost:/usr/local/nginx/conf/tcp_backhost
+      - /var/gb/conf/nginx-inner-fserver/tcp_facadehost:/usr/local/nginx/conf/tcp_facadehost
+      - /var/gb/logs/tengine/fserver:/data/nginx/logs
+
+  tngx-gather:
+    image: hub:5000/gb-tengine:2.2.0
+    networks:
+      - gb-net
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.type == gb_Trace
+      restart_policy:
+        condition: on-failure
+    healthcheck:
+      test: ["port_check", "92"]
+      interval: 5s
+      timeout: 3s
+      retries: 3
+    hostname: tngx-gather
+    ports:
+      - "92:92"
+      - "61:61"
+      - "62:62"
+      - "63:63"
+    volumes:
+      - /var/gb/conf/nginx-gather/http_backhost:/usr/local/nginx/conf/http_backhost
+      - /var/gb/conf/nginx-gather/http_facadehost:/usr/local/nginx/conf/http_facadehost
+      - /var/gb/conf/nginx-gather/tcp_backhost:/usr/local/nginx/conf/tcp_backhost
+      - /var/gb/conf/nginx-gather/tcp_facadehost:/usr/local/nginx/conf/tcp_facadehost
+      - /var/gb/logs/tengine/gather:/data/nginx/logs
+
+  tengin-mobile:
+    image: hub:5000/gb-tengine:2.2.0
+    networks:
+      - gb-net
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.type == gb_Trace
+      restart_policy:
+        condition: on-failure
+    hostname: tengine-mobile
+    ports:
+      - "93:80"
+    volumes:
+      - /var/gb/data/fserver/upload/data:/data/upload/data
+      - /var/gb/conf/nginx-inner-outer/http_backhost_outer:/usr/local/nginx/conf/http_backhost_outer
+      - /var/gb/conf/nginx-inner/lua:/usr/local/nginx/conf/lua
+      - /var/gb/conf/nginx-inner/http_backhost:/usr/local/nginx/conf/http_backhost
+      - /var/gb/conf/nginx-inner/http_facadehost:/usr/local/nginx/conf/http_facadehost
+      - /var/gb/conf/nginx-inner/tcp_backhost:/usr/local/nginx/conf/tcp_backhost
+      - /var/gb/conf/nginx-inner/tcp_facadehost:/usr/local/nginx/conf/tcp_facadehost
+      - /var/gb/logs/tengine/mobile:/data/nginx/logs
+

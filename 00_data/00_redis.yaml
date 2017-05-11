@@ -1,0 +1,91 @@
+# Usage : docker stack deploy -c redis.yml RD
+
+# service默认规则： redis_<NO.>_<m|s>
+# 如果 service 命名规则非默认，请跟进修改 create_redis_cluster.sh 变量定义的awk匹配规则
+version: "3"
+
+networks:
+    gb-net:
+        external: true
+
+services:
+
+#  ===================  master  ===================
+    redis_d1_m:
+        image: hub:5000/gb-redis:3.2.8
+        networks:
+            - gb-net
+        hostname: redis_d1_m
+        deploy:
+            placement:
+                constraints:
+                    # 部署在指定的节点
+                    - node.hostname == D1
+            restart_policy:
+                    condition: on-failure
+
+    redis_d2_m:
+        image: hub:5000/gb-redis:3.2.8
+        networks:
+            - gb-net
+        hostname: redis_d2_m
+        deploy:
+            placement:
+                constraints:
+                    # 部署在指定的节点
+                    - node.hostname == D2
+            restart_policy:
+                    condition: on-failure
+
+    redis_d3_m:
+        image: hub:5000/gb-redis:3.2.8
+        networks:
+            - gb-net
+        hostname: redis_d3_m
+        deploy:
+            placement:
+                constraints:
+                    # 部署在指定的节点
+                    - node.hostname == D3
+            restart_policy:
+                    condition: on-failure
+
+# ===================  slave  ===================
+    redis_d1_s:
+        image: hub:5000/gb-redis:3.2.8
+        networks:
+            - gb-net
+        hostname: redis_d1_s
+        deploy:
+            placement:
+                constraints:
+                    # 部署在指定的节点
+                    - node.hostname == D1
+            restart_policy:
+                    condition: on-failure
+
+    redis_d2_s:
+        image: hub:5000/gb-redis:3.2.8
+        networks:
+            - gb-net
+        hostname: redis_d2_s
+        deploy:
+            placement:
+                constraints:
+                    # 部署在指定的节点
+                    - node.hostname == D2
+            restart_policy:
+                    condition: on-failure
+
+    redis_d3_s:
+        image: hub:5000/gb-redis:3.2.8
+        networks:
+            - gb-net
+        hostname: redis_d3_s
+        deploy:
+            placement:
+                constraints:
+                    # 部署在指定的节点
+                    - node.hostname == D3
+            restart_policy:
+                    condition: on-failure

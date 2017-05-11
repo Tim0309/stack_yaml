@@ -1,0 +1,46 @@
+# tngx-msites     "81:80"
+# tngx-pcenter    "82:80"
+# tngx-tcenter    "83:80"
+# tngx-acenter    "84:80"
+# tngx-mdcenter   "85:80"
+# tngx-boss       "86:80"
+# tngx-ccenter    "87:80"
+# tngx-rcenter    "89:80"
+# tngx-api        "90:80"
+# tngx-fserver    "91:80"
+# tngx-gather     "92:92" "61:61"  "62:62" "63:63"
+# tengine-mobile  "93:80"
+# 
+version: "3"
+networks:
+  gb-net:
+    external: true
+
+services:
+# 88 
+  tngx-rcenter:
+    image: hub:5000/gb-tengine:2.2.0
+    networks:
+      - gb-net
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.type == gb_Trace
+      restart_policy:
+        condition: on-failure
+    hostname: tngx-rcenter
+    ports:
+      - "89:80"
+    volumes:
+      - /var/gb/conf/nginx-inner-outer/http_backhost_outer:/usr/local/nginx/conf/http_backhost_outer
+      - /var/gb/conf/nginx-rcenter/http_backhost:/usr/local/nginx/conf/http_backhost
+      - /var/gb/conf/nginx-rcenter/http_facadehost:/usr/local/nginx/conf/http_facadehost
+      - /var/gb/conf/nginx-rcenter/tcp_backhost:/usr/local/nginx/conf/tcp_backhost
+      - /var/gb/conf/nginx-rcenter/tcp_facadehost:/usr/local/nginx/conf/tcp_facadehost
+      - /var/gb/logs/tengine/rcenter:/data/nginx/logs
+      - /var/gb/data/fserver/upload/data:/usr/local/nginx/html/fserver/files 
+      - /var/gb/apps/ftl:/usr/local/nginx/html/ftl
+      - /var/gb/apps/rcenter:/usr/local/nginx/html/rcenter
+      - /var/gb/script:/usr/local/nginx/script
+

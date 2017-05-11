@@ -1,0 +1,38 @@
+#  gb-acenter
+#  gb-api
+#  gb-boss
+#  gb-ccenter
+#  gb-mcenter
+#  gb-mdcenter
+#  gb-mobile
+#  gb-msites
+#  gb-pcenter
+#  gb-service
+#  gb-tcenter
+#
+version: "3"
+
+networks:
+  gb-net:
+    external: true
+
+services:
+  TEST:
+    image: hub:5000/gb-tomcat-tengine:7.0.77
+    networks:
+      - gb-net
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.type == gb_APP
+      restart_policy:
+          condition: on-failure
+    hostname: TEST
+    ports:
+      - "11181:8080"
+    volumes:
+      - /var/gb/conf/test/tomcat-conf:/usr/local/tomcat/conf
+      - /var/gb/apps/test:/usr/local/tomcat/webapps
+
+

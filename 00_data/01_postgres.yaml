@@ -1,0 +1,56 @@
+# Usage : docker stack deploy -c postgres.stack.yml pgSQL
+version: "3"
+
+networks:
+    gb-net:
+        external: true
+
+services:
+    pgsql_d1:
+        image: hub:5000/gb-postgres:9.6.2 
+        networks:
+            - gb-net
+        hostname: pgsql_d1
+        deploy:
+            placement:
+                constraints:
+                    # 部署在指定的节点
+                    - node.hostname == D1
+            restart_policy:
+                    condition: none
+        volumes:
+            -
+                /var/gb/data/pg/pg_sites01/:/var/data/ 
+
+    pgsql_d2:
+        image: hub:5000/gb-postgres:9.6.2 
+        networks:
+            - gb-net
+        hostname: pgsql_d2
+        deploy:
+            placement:
+                constraints:
+                    # 部署在指定的节点
+                    - node.hostname == D2
+            restart_policy:
+                    condition: none
+        volumes:
+            -
+                /var/gb/data/pg/pg_sites02/:/var/data/ 
+
+    pgsql_d3:
+        image: hub:5000/gb-postgres:9.6.2 
+        networks:
+            - gb-net
+        hostname: pgsql_d3
+        deploy:
+            placement:
+                constraints:
+                    # 部署在指定的节点
+                    - node.hostname == D3
+            restart_policy:
+                    condition: none
+        volumes:
+            -
+                /var/gb/data/pg/pg_sites03/:/var/data/ 
+

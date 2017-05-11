@@ -1,0 +1,109 @@
+# MQ_a1_m     MQ_a2_m     MQ_a3_m
+# MQ_a1_s     MQ_a2_s     MQ_a3_s
+#
+version: "3"
+
+networks:
+    gb-net:
+        external: true
+
+services:
+    MQ_a1_m:
+        image: hub:5000/gb-rocketmq:3.5.8
+        networks:
+            - gb-net
+        hostname: MQ_a1_m
+        environment:
+            - brokerName=MQ_a1_m
+            # 主=0, 备≠ 0
+            - brokerId=0
+            # 主=SYNC_MASTER; 备=SLAVE
+            #- brokerRole=SYNC_MASTER
+            - namesrvAddr=MQ_a1_m:9876;MQ_a1_s:9876;MQ_a2_m:9876;MQ_a2_s:9876;MQ_a3_m:9876;MQ_a3_s:9876
+        deploy:
+            placement:
+                constraints:
+                    # 部署在指定的节点
+                    - node.hostname == A1
+            restart_policy:
+                    condition: on-failure
+
+    MQ_a1_s:
+        image: hub:5000/gb-rocketmq:3.5.8
+        networks:
+            - gb-net
+        hostname: MQ_a1_s
+        environment:
+            - brokerName=MQ_a1_s
+            - brokerId=1
+            - namesrvAddr=MQ_a1_m:9876;MQ_a1_s:9876;MQ_a2_m:9876;MQ_a2_s:9876;MQ_a3_m:9876;MQ_a3_s:9876
+        deploy:
+            placement:
+                constraints:
+                    - node.hostname == A2
+            restart_policy:
+                    condition: on-failure
+
+    MQ_a2_m:
+        image: hub:5000/gb-rocketmq:3.5.8
+        networks:
+            - gb-net
+        hostname: MQ_a2_m
+        environment:
+            - brokerName=MQ_a2_m
+            - brokerId=0
+            - namesrvAddr=MQ_a1_m:9876;MQ_a1_s:9876;MQ_a2_m:9876;MQ_a2_s:9876;MQ_a3_m:9876;MQ_a3_s:9876
+        deploy:
+            placement:
+                constraints:
+                    - node.hostname == A2
+            restart_policy:
+                    condition: on-failure
+
+    MQ_a2_s:
+        image: hub:5000/gb-rocketmq:3.5.8
+        networks:
+            - gb-net
+        hostname: MQ_a2_s
+        environment:
+            - brokerName=MQ_a2_s
+            - brokerId=1
+            - namesrvAddr=MQ_a1_m:9876;MQ_a1_s:9876;MQ_a2_m:9876;MQ_a2_s:9876;MQ_a3_m:9876;MQ_a3_s:9876
+        deploy:
+            placement:
+                constraints:
+                    - node.hostname == A3
+            restart_policy:
+                    condition: on-failure
+
+    MQ_a3_m:
+        image: hub:5000/gb-rocketmq:3.5.8
+        networks:
+            - gb-net
+        hostname: MQ_a3_m
+        environment:
+            - brokerName=MQ_a3_m
+            - brokerId=0
+            - namesrvAddr=MQ_a1_m:9876;MQ_a1_s:9876;MQ_a2_m:9876;MQ_a2_s:9876;MQ_a3_m:9876;MQ_a3_s:9876
+        deploy:
+            placement:
+                constraints:
+                    - node.hostname == A3
+            restart_policy:
+                    condition: on-failure
+
+    MQ_a3_s:
+        image: hub:5000/gb-rocketmq:3.5.8
+        networks:
+            - gb-net
+        hostname: MQ_a3_s
+        environment:
+            - brokerName=MQ_a3_s
+            - brokerId=1
+            - namesrvAddr=MQ_a1_m:9876;MQ_a1_s:9876;MQ_a2_m:9876;MQ_a2_s:9876;MQ_a3_m:9876;MQ_a3_s:9876
+        deploy:
+            placement:
+                constraints:
+                    - node.hostname == A1
+            restart_policy:
+                    condition: on-failure

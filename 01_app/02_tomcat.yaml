@@ -1,0 +1,209 @@
+#  gb-acenter
+#  gb-api
+#  gb-boss
+#  gb-ccenter
+#  gb-mcenter
+#  gb-mdcenter
+#  gb-mobile
+#  gb-msites
+#  gb-pcenter
+#  gb-service
+#  gb-tcenter
+#
+version: "3"
+
+networks:
+  gb-net:
+    external: true
+
+services:
+  gb-acenter:
+    image: hub:5000/gb-tomcat-tengine:7.0.77
+    networks:
+      - gb-net
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.type == gb_APP
+      restart_policy:
+          condition: on-failure
+    hostname: gb-acenter
+    volumes:
+      - /var/gb/apps/acenter:/usr/local/tomcat/webapps/acenter
+      - /var/gb/logs/acenter:/usr/local/tomcat/logs/
+
+  gb-api:
+    image: hub:5000/gb-tomcat-tengine:7.0.77
+    networks:
+      - gb-net
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.type == gb_APP
+      restart_policy:
+          condition: on-failure
+    hostname: gb-api
+    volumes:
+      - /var/gb/data/mq/api-rdb:/var/data/mq/rdb
+      - /var/gb/apps/pay-impl-jars:/data/impl-jars/pay
+      - /var/gb/apps/api-impl-jars:/data/impl-jars/api
+      - /var/gb/apps/api:/usr/local/tomcat/webapps/api
+      - /var/gb/logs/api:/usr/local/tomcat/logs/
+
+  gb-boss:
+    image: hub:5000/gb-tomcat-tengine:7.0.77
+    networks:
+      - gb-net
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.type == gb_APP
+      restart_policy:
+          condition: on-failure
+    hostname: gb-boss
+    volumes:
+      - /var/gb/apps/boss:/usr/local/tomcat/webapps/boss
+      - /var/gb/logs/boss:/usr/local/tomcat/logs/
+      - /var/gb/data/pg/pg_boss/backup:/var/data/backup
+
+  gb-ccenter:
+    image: hub:5000/gb-tomcat-tengine:7.0.77
+    networks:
+      - gb-net
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.type == gb_APP
+      restart_policy:
+          condition: on-failure
+    hostname: gb-ccenter
+    volumes:
+      - /var/gb/apps/ccenter:/usr/local/tomcat/webapps/ccenter
+      - /var/gb/logs/ccenter:/usr/local/tomcat/logs/
+
+  gb-mcenter:
+    image: hub:5000/gb-tomcat-tengine:7.0.77
+    networks:
+      - gb-net
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.type == gb_APP
+      restart_policy:
+          condition: on-failure
+    hostname: gb-mcenter
+    volumes:
+      - /var/gb/apps/mcenter:/usr/local/tomcat/webapps/mcenter
+      - /var/gb/logs/mcenter:/usr/local/tomcat/logs/
+
+  gb-mdcenter:
+    image: hub:5000/gb-tomcat-tengine:7.0.77
+    networks:
+      - gb-net
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.type == gb_APP
+      restart_policy:
+          condition: on-failure
+    hostname: gb-mdcenter
+    volumes:
+      - /var/gb/data/mq/mdcenter-rdb:/var/data/mq/rdb
+      - /var/gb/apps/mdcenter:/usr/local/tomcat/webapps/mdcenter
+      - /var/gb/logs/mdcenter:/usr/local/tomcat/logs/
+
+
+  gb-mobile:
+    image: hub:5000/gb-tomcat-tengine:7.0.77
+    networks:
+      - gb-net
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.type == gb_APP
+      restart_policy:
+          condition: on-failure
+    hostname: gb-mobile
+    volumes:
+      - /var/gb/apps/mobile:/usr/local/tomcat/webapps/ROOT
+      - /var/gb/logs/mobile:/usr/local/tomcat/logs/
+
+  gb-msites:
+    image: hub:5000/gb-tomcat-tengine:7.0.77
+    networks:
+      - gb-net
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.type == gb_APP
+      restart_policy:
+          condition: on-failure
+    hostname: gb-msites
+    volumes:
+      - /var/gb/apps/msites:/usr/local/tomcat/webapps/ROOT
+      - /var/gb/logs/msites:/usr/local/tomcat/logs/
+
+
+  gb-pcenter:
+    image: hub:5000/gb-tomcat-tengine:7.0.77
+    networks:
+      - gb-net
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.type == gb_APP
+      restart_policy:
+          condition: on-failure
+    hostname: gb-pcenter
+    ports:
+      - "20080:8080"
+    volumes:
+      - /var/gb/apps/pcenter:/usr/local/tomcat/webapps/pcenter
+      - /var/gb/logs/pcenter:/usr/local/tomcat/logs/
+
+  gb-service:
+    image: hub:5000/gb-tomcat-tengine:7.0.77
+    networks:
+      - gb-net
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.type == gb_APP
+      restart_policy:
+          condition: on-failure
+    hostname: gb-service
+    environment:
+      - NodeCount=3
+      - NodeId=0
+    volumes:
+      - /var/gb/data/mq/service-rdb:/var/data/mq/rdb
+      - /var/gb/apps/pay-impl-jars:/data/impl-jars/pay
+      - /var/gb/apps/api-impl-jars:/data/impl-jars/api
+      - /var/gb/apps/service:/usr/local/tomcat/webapps/service
+      - /var/gb/logs/service:/usr/local/tomcat/logs/
+
+  gb-tcenter:
+    image: hub:5000/gb-tomcat-tengine:7.0.77
+    networks:
+      - gb-net
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.type == gb_APP
+      restart_policy:
+          condition: on-failure
+    hostname: gb-tcenter
+    volumes:
+      - /var/gb/apps/tcenter:/usr/local/tomcat/webapps/tcenter
+      - /var/gb/logs/tcenter:/usr/local/tomcat/logs/

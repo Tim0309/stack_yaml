@@ -1,0 +1,22 @@
+version: "3"
+
+networks:
+  gb-net:
+    external: true
+
+services:
+  gb-gather-server:
+    image: hub:5000/gb-gather-server
+    networks:
+      - gb-net
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.type == gb_APP
+      restart_policy:
+        condition: on-failure
+    hostname: gb-gather-server
+    volumes:
+      - /var/gb/apps/gather-server:/usr/local/gather-server
+      - /var/gb/logs/gather-server:/usr/local/logs

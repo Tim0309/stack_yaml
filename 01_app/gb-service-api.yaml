@@ -1,0 +1,28 @@
+version: "3"
+
+networks:
+  gb-net:
+    external: true
+
+services:
+  gb-service-api:
+    image: hub:5000/gb-tomcat-tengine:7.0.77
+    networks:
+      - gb-net
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.type == gb_APP
+      restart_policy:
+          condition: on-failure
+    hostname: gb-service-api
+    environment:
+      - NodeCount=3
+      - NodeId=0
+    volumes:
+      - /var/gb/data/mq/service-api-rdb:/var/data/mq/rdb
+      - /var/gb/apps/api-impl-jars:/data/impl-jars/api
+      - /var/gb/apps/pay-impl-jars:/data/impl-jars/pay
+      - /var/gb/apps/service-api:/usr/local/tomcat/webapps/service-api
+      - /var/gb/logs/service-api:/usr/local/tomcat/logs/

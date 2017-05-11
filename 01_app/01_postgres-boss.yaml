@@ -1,0 +1,25 @@
+#  postgres-boss
+#
+version: "3"
+
+networks:
+  gb-net:
+    external: true
+
+services:
+  postgres-boss:
+    image:  hub:5000/gb-postgres:9.6.2
+    networks:
+      - gb-net
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.hostname == A1
+      restart_policy:
+          condition: on-failure
+    hostname: postgres-boss
+    volumes:
+      - /var/gb/data/pg/pg_boss/backup:/var/data/backup
+      - /var/gb/data/pg/pg_boss/data:/var/data/postgres
+      - /var/gb/data/pg/pg_boss/xlog_archive:/var/data/xlog_archive

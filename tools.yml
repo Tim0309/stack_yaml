@@ -1,0 +1,51 @@
+# Usage : docker stack deploy -c tools.yml TOOLS
+version: "3"
+
+services:
+    swarm-visualizer:
+        image: hub:5000/visualizer
+        ports:
+            - "8001:8080"
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
+        deploy:
+            replicas: 1
+            placement:
+                constraints:
+                    - node.hostname==Tim-PC
+            restart_policy:
+                    condition: on-failure
+
+    google-cadvisor:
+        image: hub:5000/cadvisor
+        ports:
+            - "8002:8080"
+        volumes:
+            - /:/rootfs:ro
+            - /var/run:/var/run:rw
+            - /sys:/sys:ro
+            - /var/lib/docker/:/var/lib/docker:ro
+        deploy:
+            replicas: 1
+            placement:
+                constraints:
+                    - node.hostname==Tim-PC
+            restart_policy:
+                    condition: on-failure
+
+    local-repo:
+        image: hub:5000/gb-nginx:1.11.13 
+        ports:
+            - "8008:80"
+        volumes:
+            - /var/yum_server/nginx:/usr/local/nginx/conf/
+            - /var/yum_server/local:/var/nginx/html
+        deploy:
+            replicas: 1
+            placement:
+                constraints:
+                    - node.hostname==D1
+            restart_policy:
+                    condition: on-failure
+
+

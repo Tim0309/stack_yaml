@@ -1,0 +1,28 @@
+# gb-fserver  "77:8080"
+#
+version: "3"
+networks:
+  gb-net:
+    external: true
+
+services:
+  gb-fserver:
+    image: hub:5000/gb-tomcat-tengine:7.0.77
+    networks:
+      - gb-net
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.type == gb_Trace
+      restart_policy:
+        condition: on-failure
+    hostname: gb-fserver
+    ports:
+      - "77:8080"
+    volumes:
+      - /var/gb/data/fserver/upload/tmp:/data/upload/tmp
+      - /var/gb/data/fserver/upload/data:/data/upload/data 
+      - /var/gb/apps/ftl:/data/ftl
+      - /var/gb/apps/fserver:/usr/local/tomcat/webapps/fserver
+      - /var/gb/logs/fserver:/usr/local/tomcat/logs/
